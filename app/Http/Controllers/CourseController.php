@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateCourseRequest;
+use App\Models\Course;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -31,15 +33,24 @@ class CourseController extends Controller
      */
     public function index()
     {
-        return response()->json($this->courses);
+        return response()->json(Course::all());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateCourseRequest $request)
     {
-        //
+        $data = $request->only([
+            'title',
+            'description',
+            'author',
+            'url'
+        ]);
+
+        $course = Course::create($data);
+
+        return response()->json($course);
     }
 
     /**
@@ -47,7 +58,7 @@ class CourseController extends Controller
      */
     public function show(string $id)
     {
-        return response()->json($this->courses[$id]);
+        return response()->json(Course::find($id));
     }
 
     /**
