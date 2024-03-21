@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
 {
     /**
      * Get a JWT via given credentials.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function login()
     {
@@ -23,7 +22,7 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
-    protected function respondWithToken($token)
+    protected function respondWithToken($token): JsonResponse
     {
         return response()->json([
             'access_token' => $token,
