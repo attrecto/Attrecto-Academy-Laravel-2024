@@ -18,10 +18,14 @@ class Course extends Model
         'url'
     ];
 
-    protected function author():Attribute {
+    protected function title():Attribute {
         return new Attribute(
-            get: fn($value) => ucfirst($value),
+            get: fn($value) => strtoupper($value),
             set: fn($value) => $value
         );
+    }
+
+    public function author(){
+        return $this->hasOne(User::class,'id','author_id');
     }
 }

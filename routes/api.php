@@ -26,15 +26,19 @@ Route::group([
     'prefix' => 'auth'
 ], function ($router) {
     Route::post('login',  [AuthController::class, 'login']);
-    //Route::post('logout', 'AuthController@logout');
-    //Route::post('refresh', 'AuthController@refresh');
-    //Route::post('me', 'AuthController@me');
 });
 
-Route::get('/courses', [CourseController::class, 'index']);
-Route::get('/courses/{course}', [CourseController::class, 'show']);
-Route::post('/courses', [CourseController::class, 'store']);
-Route::put('/courses/{id}', [CourseController::class, 'update']);
-Route::delete('/courses/{id}', [CourseController::class, 'destroy']);
+Route::prefix('courses')->group(function () {
+    Route::middleware(['api', 'role:admin'])->group(function () {
+        Route::post('/',[CourseController::class,'store']);
+        Route::get('/',  [CourseController::class, 'index']);
+        Route::get('/{id}',  [CourseController::class, 'show']);
+        Route::put('/{id}',[CourseController::class,'update']);
+        Route::delete('/{id}',[CourseController::class,'destroy']);
 
-Route::post('/users', [UserController::class, 'store']);
+    });
+});
+
+Route::group(['middleware' => ['api']], function() {
+    Route::post('/users',[UserController::class,'store']);
+});
